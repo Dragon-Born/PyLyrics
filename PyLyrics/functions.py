@@ -41,7 +41,7 @@ class PyLyrics:
 	@staticmethod
 	def getAlbums(singer):
 		singer = singer.replace(' ', '_')
-		s = BeautifulSoup(requests.get('http://lyrics.wikia.com/{0}'.format(singer)).text)
+		s = BeautifulSoup(requests.get('http://lyrics.wikia.com/{0}'.format(singer)).text, 'html.parser')
 		spans = s.findAll('span',{'class':'mw-headline'})
 		
 		als = []
@@ -60,7 +60,7 @@ class PyLyrics:
 	@staticmethod 
 	def getTracks(album):
 		url = "http://lyrics.wikia.com/api.php?action=lyrics&artist={0}&fmt=xml".format(album.artist())
-		soup = BeautifulSoup(requests.get(url).text)
+		soup = BeautifulSoup(requests.get(url).text, 'html.parser')
 
 		for al in soup.find_all('album'):
 			if al.text.lower().strip() == album.name.strip().lower():
@@ -75,7 +75,7 @@ class PyLyrics:
 		singer = singer.replace(' ', '_')
 		song = song.replace(' ', '_')
 		r = requests.get('http://lyrics.wikia.com/{0}:{1}'.format(singer,song))
-		s = BeautifulSoup(r.text)
+		s = BeautifulSoup(r.text, 'html.parser')
 		#Get main lyrics holder
 		lyrics = s.find("div",{'class':'lyricbox'})
 		if lyrics is None:
